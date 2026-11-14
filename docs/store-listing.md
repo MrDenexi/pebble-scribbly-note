@@ -23,7 +23,7 @@ Also handy for parking spots, door codes, table numbers or a short shopping list
 - Opens straight to your last note
 - Write with your finger on the touchscreen
 - UP undoes the last stroke, SELECT finishes the note
-- Press SELECT to start a new note; the old one is replaced
+- Hold SELECT to start a new note; the old one is replaced. A short press does nothing, so a bumped button won't wipe your note
 - Touch is ignored while viewing, so you can't scribble over your note by accident
 - Saved after every stroke
 - Works fully offline: no phone, account or internet needed

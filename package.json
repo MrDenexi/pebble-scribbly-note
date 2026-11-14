@@ -11,16 +11,12 @@
     "displayName": "Scribbly Note",
     "uuid": "0f5c1741-0984-48b8-900d-53b70ba4f116",
     "sdkVersion": "3",
-    "enableMultiJS": true,
     "targetPlatforms": [
       "emery"
     ],
     "watchapp": {
       "watchface": false
     },
-    "messageKeys": [
-      "dummy"
-    ],
     "resources": {
       "media": [
         {

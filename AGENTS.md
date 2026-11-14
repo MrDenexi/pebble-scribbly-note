@@ -85,7 +85,7 @@ Scribbly Note: a one-time handwritten note for touchscreen Pebbles (targets emer
 
 1. **Single window** with a canvas `Layer` that redraws the note from a list of points, plus a hint `TextLayer`.
 2. **Touch input** via `touch_service_subscribe`; `window_set_touch_bridge_disabled` stops the system turning touches into button presses.
-3. **Modes**: view mode (shows last note, touch ignored, SELECT = new note which erases the old one) and write mode (draw, UP = undo stroke, SELECT = done).
+3. **Modes**: view mode (shows last note, touch ignored, hold SELECT = new note which erases the old one; short SELECT does nothing) and write mode (draw, UP = undo stroke, SELECT = done).
 4. **Storage**: points are `{uint8 x, uint8 y}` with `0xFF` as pen-up marker, persisted in 256-byte chunks (keys 100+) with the point count at key 1. Saved after every stroke.
 
 Testing touch in the emulator: `pebble` has no touch command and QEMU's `mouse_move` is relative (ignored by the absolute touch device). Use X11 XTest pointer events on the emulator's SDL window instead (DISPLAY=:1 in the devcontainer).

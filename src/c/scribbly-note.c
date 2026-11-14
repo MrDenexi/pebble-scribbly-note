@@ -2,7 +2,8 @@
 //
 // View mode (default when a note exists): shows the last note. Touch is ignored
 //   so you cannot accidentally scribble over your locker number.
-//   SELECT  -> start a new note (erases the old one)
+//   Hold SELECT -> start a new note (erases the old one). A short press does
+//                  nothing, so a bumped button can't wipe your note.
 //
 // Write mode: draw with your finger.
 //   UP      -> undo last stroke
@@ -26,6 +27,7 @@
 #define KEY_CHUNK_BASE 100              // chunks live at keys 100, 101, ...
 #define MIN_SEGMENT_SQ 4                // ignore moves shorter than 2px
 #define STROKE_WIDTH 5
+#define NEW_NOTE_HOLD_MS 800             // how long to hold SELECT for a new note
 
 typedef struct {
   uint8_t x;
@@ -38,6 +40,7 @@ static int s_count;
 static Window *s_window;
 static Layer *s_canvas;
 static TextLayer *s_hint_layer;
+static TextLayer *s_footer_layer;
 static bool s_writing;
 static bool s_pen_down;
 static bool s_dirty;
@@ -139,12 +142,14 @@ static void prv_update_hint(void) {
   } else if (s_writing && s_count == 0) {
     hint = "Write your note\n\nUP: undo\nSELECT: done";
   } else if (!s_writing && s_count == 0) {
-    hint = "No note yet\n\nSELECT: new note";
+    hint = "No note yet\n\nHold SELECT:\nnew note";
   }
   layer_set_hidden(text_layer_get_layer(s_hint_layer), hint == NULL);
   if (hint) {
     text_layer_set_text(s_hint_layer, hint);
   }
+  // Small reminder under a saved note of how to replace it.
+  layer_set_hidden(text_layer_get_layer(s_footer_layer), s_writing || s_count == 0);
 }
 
 static void prv_canvas_update(Layer *layer, GContext *ctx) {
@@ -222,18 +227,25 @@ static void prv_touch_handler(const TouchEvent *event, void *context) {
   layer_mark_dirty(s_canvas);
 }
 
+// Short press: finish writing. Ignored while viewing so a bump can't erase the note.
 static void prv_select_click_handler(ClickRecognizerRef recognizer, void *context) {
   if (s_writing) {
     prv_end_stroke();
     prv_save();
     prv_set_writing(false);
-  } else {
-    // New note: the old one is gone.
-    s_count = 0;
-    s_dirty = true;
-    prv_save();
-    prv_set_writing(true);
   }
+}
+
+// Hold: start a new note. The old one is gone.
+static void prv_select_long_click_handler(ClickRecognizerRef recognizer, void *context) {
+  if (s_writing) {
+    return;
+  }
+  vibes_short_pulse();
+  s_count = 0;
+  s_dirty = true;
+  prv_save();
+  prv_set_writing(true);
 }
 
 static void prv_up_click_handler(ClickRecognizerRef recognizer, void *context) {
@@ -249,6 +261,7 @@ static void prv_up_click_handler(ClickRecognizerRef recognizer, void *context) {
 
 static void prv_click_config_provider(void *context) {
   window_single_click_subscribe(BUTTON_ID_SELECT, prv_select_click_handler);
+  window_long_click_subscribe(BUTTON_ID_SELECT, NEW_NOTE_HOLD_MS, prv_select_long_click_handler, NULL);
   window_single_click_subscribe(BUTTON_ID_UP, prv_up_click_handler);
 }
 
@@ -267,11 +280,20 @@ static void prv_window_load(Window *window) {
   text_layer_set_text_alignment(s_hint_layer, GTextAlignmentCenter);
   layer_add_child(root, text_layer_get_layer(s_hint_layer));
 
+  s_footer_layer = text_layer_create(GRect(0, bounds.size.h - 20, bounds.size.w, 20));
+  text_layer_set_background_color(s_footer_layer, GColorClear);
+  text_layer_set_text_color(s_footer_layer, GColorDarkGray);
+  text_layer_set_font(s_footer_layer, fonts_get_system_font(FONT_KEY_GOTHIC_14));
+  text_layer_set_text_alignment(s_footer_layer, GTextAlignmentCenter);
+  text_layer_set_text(s_footer_layer, "Hold SELECT: new note");
+  layer_add_child(root, text_layer_get_layer(s_footer_layer));
+
   // Start writing straight away if there is nothing to show.
   prv_set_writing(s_count == 0);
 }
 
 static void prv_window_unload(Window *window) {
+  text_layer_destroy(s_footer_layer);
   text_layer_destroy(s_hint_layer);
   layer_destroy(s_canvas);
 }

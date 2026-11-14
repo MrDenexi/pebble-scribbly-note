@@ -28,7 +28,7 @@ lists, no folders, nothing to clean up.
 
 | Screen | Button | What it does |
 |---|---|---|
-| Viewing your note | **SELECT** | Start a new note (the old note is erased) |
+| Viewing your note | **Hold SELECT** | Start a new note (the old note is erased). A short press does nothing, so a bumped button can't wipe your note. |
 | | **BACK** | Close the app |
 | Writing | *finger* | Draw on the screen |
 | | **UP** | Undo the last stroke |
