@@ -1535,7 +1535,7 @@ DISCARD
  libm.a(*)
  libgcc.a(*)
  *(.eh_frame)
-OUTPUT(/workspaces/pebble-scribbly-note/scribbly-note/build/emery/pebble-app.elf elf32-littlearm)
+OUTPUT(/workspaces/pebble-scribbly-note/build/emery/pebble-app.elf elf32-littlearm)
 LOAD linker stubs
 LOAD /home/vscode/.local/share/pebble-sdk/SDKs/4.44/toolchain/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libc.a
 LOAD /home/vscode/.local/share/pebble-sdk/SDKs/4.44/toolchain/arm-none-eabi/bin/../lib/gcc/arm-none-eabi/14.2.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp/libm.a
@@ -1579,12 +1579,12 @@ LOAD /home/vscode/.local/share/pebble-sdk/SDKs/4.44/toolchain/arm-none-eabi/bin/
  .debug_line    0x00000a72      0x125 emery/src/resource_ids.auto.c.9.o
  .debug_line    0x00000b97      0x11f src/message_keys.auto.c.9.o
 
-.debug_str      0x00000000      0xd44
- .debug_str     0x00000000      0xd44 src/c/scribbly-note.c.9.o
-                                0xa42 (size before relaxing)
- .debug_str     0x00000d44      0x4f3 emery/appinfo.auto.c.9.o
- .debug_str     0x00000d44      0x19a emery/src/resource_ids.auto.c.9.o
- .debug_str     0x00000d44      0x18a src/message_keys.auto.c.9.o
+.debug_str      0x00000000      0xd36
+ .debug_str     0x00000000      0xd36 src/c/scribbly-note.c.9.o
+                                0xa34 (size before relaxing)
+ .debug_str     0x00000d36      0x4e5 emery/appinfo.auto.c.9.o
+ .debug_str     0x00000d36      0x18c emery/src/resource_ids.auto.c.9.o
+ .debug_str     0x00000d36      0x17c src/message_keys.auto.c.9.o
 
 .comment        0x00000000       0x7e
  .comment       0x00000000       0x7e src/c/scribbly-note.c.9.o
