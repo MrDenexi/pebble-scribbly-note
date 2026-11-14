@@ -1,0 +1,43 @@
+{
+  "name": "Pebble Time 2 (emery) SDK",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "remoteUser": "vscode",
+
+  // Lightweight desktop so the SDL-based Pebble emulator has a display.
+  // Open http://localhost:6080 (password: vscode) to see the emulator.
+  "features": {
+    "ghcr.io/devcontainers/features/desktop-lite:1": {}
+  },
+  "forwardPorts": [6080, 5901],
+  "portsAttributes": {
+    "6080": { "label": "Emulator desktop (noVNC)" },
+    "5901": { "label": "Emulator desktop (VNC)", "onAutoForward": "silent" }
+  },
+
+  "containerEnv": {
+    // Default emulator target: Pebble Time 2.
+    "PEBBLE_PLATFORM": "emery"
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.cpptools",
+        "dbaeumer.vscode-eslint"
+      ],
+      "settings": {
+        "C_Cpp.default.cStandard": "c11",
+        "C_Cpp.default.compilerPath": "/home/vscode/.local/share/pebble-sdk/SDKs/current/toolchain/arm-none-eabi/bin/arm-none-eabi-gcc",
+        "C_Cpp.default.includePath": [
+          "${workspaceFolder}/**",
+          "/home/vscode/.local/share/pebble-sdk/SDKs/current/sdk-core/pebble/emery/include",
+          "${workspaceFolder}/build/emery/**"
+        ]
+      }
+    }
+  },
+
+  "postCreateCommand": "pebble --version && pebble sdk list"
+}
